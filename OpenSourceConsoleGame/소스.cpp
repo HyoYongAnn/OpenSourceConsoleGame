@@ -20,7 +20,8 @@ int GameBoard[GBOARD_HEIGHT + 1][GBOARD_WIDTH + 2];
 int block_id;
 int block_spin;
 int curPosX, curPosY;
-int speed = 30;
+int speed = 15;
+int score;
 
 
 void SetCurrentCursorPos(int x, int y)
@@ -137,6 +138,16 @@ void BlockDown()
 	showBlock(blockModel[block_id][block_spin]);
 }
 
+void BlockFastDown()
+{
+	if (IsCollision(curPosX, curPosY + 1, block_spin))
+		return;
+	deleteBlock(blockModel[block_id][block_spin]);
+	curPosY += 1;
+	SetCurrentCursorPos(curPosX, curPosY);
+	showBlock(blockModel[block_id][block_spin]);
+}
+
 void BlockUp()
 {
 	deleteBlock(blockModel[block_id][block_spin]);
@@ -184,6 +195,9 @@ void ProcessKeyInput()
 				break;
 			case UP:
 				RotateBlock();
+				break;
+			case DOWN:
+				BlockFastDown();
 				break;
 			case SPACE:
 				BlockDrop();
@@ -288,6 +302,19 @@ void initGameBoard()//게임보드 초기화
 				GameBoard[y][x] = 0;
 		}
 }
+void printScore()
+{
+	SetCurrentCursorPos(30, 5);
+	printf("[Score : %d]", score);
+}
+
+void gameover()
+{
+	SetCurrentCursorPos(24, 11);
+	printf("Game Over!");
+	SetCurrentCursorPos(22, 14);
+	printf("[Your Score : %d]", score);
+}
 
 int main()
 {
@@ -296,18 +323,18 @@ int main()
 	srand(time(NULL));
 	system("mode con: cols=60 lines=30");
 	//각종 설정 초기화
-
+	score = 0;
 	RemoveCursor(); //커서제거
-
+	printScore(); // 점수판 출력
 	drawBoard(); //보드 경계 그리기
 
 	while (1)
 	{
-		block_id = rand() % 7;
+		block_id = rand() % 7;//랜덤 블록 생성
 		curPosX = 12;
 		curPosY = 0;
 		SetCurrentCursorPos(curPosX, curPosY);
-		if (IsCollision(curPosX, curPosY, block_spin))
+		if (IsCollision(curPosX, curPosY, block_spin)) //시작위치에 이미 블록 존재시 게임오버
 			break;
 
 		while (IsCollision(curPosX, curPosY + 1, block_spin) == false)//아래에 충돌할때까지 반복
@@ -318,10 +345,11 @@ int main()
 		FillBoard(); //배열보드를 채움
 		completeLine(); //한줄 완성시 제거
 		ReDraw(); //보드판 다시그림
+		printScore();//점수 출력
 	}
 
 	system("cls");
-
+	gameover();
 	getchar();
 	return 0;
 }
