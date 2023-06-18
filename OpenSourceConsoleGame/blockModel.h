@@ -1,6 +1,6 @@
 #pragma once
 
-int blockModel[7][4][4][4] = {
+int blockModel[7][4][4][4] = { //블록 모양들
     {
         {
                         {0, 0, 0, 0},
