@@ -105,7 +105,8 @@ void FillBoard()
 	for (int y = 0; y < 4; y++)
 		for (int x = 0; x < 4; x++)
 		{
-			GameBoard[arrY + y][arrX + x] = blockModel[block_id][block_spin][y][x];
+			if(GameBoard[arrY + y][arrX + x] == 0)
+				GameBoard[arrY + y][arrX + x] = blockModel[block_id][block_spin][y][x];
 		}
 }
 
@@ -270,7 +271,7 @@ int main()
 		block_id = rand() % 7;
 		curPosX = 12;
 		curPosY = 0;
-
+		SetCurrentCursorPos(curPosX, curPosY);
 		while (IsCollision(curPosX, curPosY + 1, block_spin) == false)
 		{
 			BlockDown();
