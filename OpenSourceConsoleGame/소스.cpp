@@ -19,7 +19,7 @@
 int block_id;
 int block_spin;
 int curPosX, curPosY;
-int speed = 50;
+int speed = 30;
 
 void SetCurrentCursorPos(int x, int y)
 {
@@ -159,18 +159,18 @@ void drawBoard()
 			printf("¦¢");
 	}
 
-	for (x = 1; x <= GBOARD_ORIGIN_X + GBOARD_WIDTH; x++)
+	for (x = 1; x <= GBOARD_WIDTH + 1; x++)
 	{
-		SetCurrentCursorPos(GBOARD_ORIGIN_X + x, GBOARD_ORIGIN_Y + GBOARD_HEIGHT);
-		if (x == GBOARD_ORIGIN_X + GBOARD_WIDTH)
+		SetCurrentCursorPos(GBOARD_ORIGIN_X + (x * 2), GBOARD_ORIGIN_Y + GBOARD_HEIGHT);
+		if (x == GBOARD_WIDTH + 1)
 			printf("¦¥");
 		else
-			printf("¦¡");
+			printf("¦¡¦¡");
 	}
 
 	for (y = 0; y < GBOARD_HEIGHT; y++)
 	{
-		SetCurrentCursorPos(GBOARD_ORIGIN_X + ((GBOARD_WIDTH - 1) * 2), GBOARD_ORIGIN_Y + y);
+		SetCurrentCursorPos(GBOARD_ORIGIN_X + ((GBOARD_WIDTH) * 2) + 2, GBOARD_ORIGIN_Y + y);
 		printf("¦¢");
 	}
 }
@@ -181,6 +181,8 @@ int main()
 	srand(time(NULL));
 	block_id = rand() % 7;
 	curPosX = curPosY = 0;
+	system("mode con: cols=60 lines=30");
+
 
 	RemoveCursor();
 
