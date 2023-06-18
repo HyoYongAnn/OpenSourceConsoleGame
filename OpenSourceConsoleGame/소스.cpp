@@ -162,11 +162,11 @@ void ProcessKeyInput()
 	for (int i = 0; i < 20; i++)
 	{
 		int key;
-		if (_kbhit() != 0)
+		if (_kbhit() != 0) //키입력 있을시
 		{
 			key = _getch();
 
-			switch (key)
+			switch (key)//키코드에 따라 행동
 			{
 			case LEFT:
 				ShiftLeft();
@@ -211,7 +211,7 @@ void drawBoard()
 	}
 }
 
-void ReDraw()
+void ReDraw() //이차원 배열보고 게임판 그려줌
 {
 	for (int y = 0; y < GBOARD_HEIGHT; y++)
 	{
@@ -227,6 +227,30 @@ void ReDraw()
 				printf("■");
 			}
 		}
+	}
+}
+
+void completeLine() //한줄 완성시 제거하고 위에꺼 내림
+{
+	for (int y = GBOARD_HEIGHT - 1; y > 0; y--)
+	{
+		bool complete = true;
+		for (int x = 1; x < GBOARD_WIDTH + 1; x++)
+		{
+			if (GameBoard[y][x] == 0)
+			{
+				complete = false;
+				break;
+			}
+			
+		}
+		if (complete)
+		{
+			for (int i = y; i > 0; i--)
+				memcpy(&GameBoard[i][1], &GameBoard[i - 1][1], 10 * sizeof(int));
+			y++;
+		}
+
 	}
 }
 
@@ -272,13 +296,14 @@ int main()
 		curPosX = 12;
 		curPosY = 0;
 		SetCurrentCursorPos(curPosX, curPosY);
-		while (IsCollision(curPosX, curPosY + 1, block_spin) == false)
+		while (IsCollision(curPosX, curPosY + 1, block_spin) == false)//아래에 충돌할때까지 반복
 		{
 			BlockDown();
 			ProcessKeyInput(); //키보드 입력 받음
 		}
-		FillBoard();
-		ReDraw();
+		FillBoard(); //배열보드를 채움
+		completeLine(); //한줄 완성시 제거
+		ReDraw(); //보드판 다시그림
 	}
 
 	getchar();
