@@ -61,7 +61,11 @@ void showBlock(int blockInfo[4][4])
 		{
 			SetCurrentCursorPos(pos.X + x * 2, pos.Y + y);
 			if (blockInfo[y][x] != 0)
+			{
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), blockInfo[y][x]);
 				printf("■");
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+			}
 		}
 		SetCurrentCursorPos(pos.X, pos.Y);
 	}
@@ -249,7 +253,9 @@ void ReDraw() //이차원 배열보고 게임판 그려줌
 			}
 			else
 			{
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), GameBoard[y][x]);
 				printf("■");
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 			}
 		}
 	}
@@ -274,6 +280,7 @@ void completeLine() //한줄 완성시 제거하고 위에꺼 내림
 			for (int i = y; i > 0; i--)
 				memcpy(&GameBoard[i][1], &GameBoard[i - 1][1], 10 * sizeof(int));
 			y++;
+			score += 10;
 		}
 
 	}
