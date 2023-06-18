@@ -7,7 +7,7 @@
 #define RIGHT 77
 #define UP 72
 #define DOWN 80
-
+#define SPACE 32
 /*Size of Gameboard*/
 #define GBOARD_HEIGHT 20
 #define GBOARD_WIDTH 10
@@ -21,7 +21,6 @@ int block_id;
 int block_spin;
 int curPosX, curPosY;
 int speed = 30;
-
 
 
 void SetCurrentCursorPos(int x, int y)
@@ -146,6 +145,15 @@ void BlockUp()
 	showBlock(blockModel[block_id][block_spin]);
 }
 
+void BlockDrop()
+{
+	deleteBlock(blockModel[block_id][block_spin]);
+	while (IsCollision(curPosX, curPosY + 1, block_spin) != true)
+		curPosY += 1;
+	SetCurrentCursorPos(curPosX, curPosY);
+	showBlock(blockModel[block_id][block_spin]);
+}
+
 void RotateBlock()
 {
 	if (IsCollision(curPosX, curPosY, block_spin + 1))
@@ -176,6 +184,9 @@ void ProcessKeyInput()
 				break;
 			case UP:
 				RotateBlock();
+				break;
+			case SPACE:
+				BlockDrop();
 				break;
 			}
 		}
@@ -296,6 +307,9 @@ int main()
 		curPosX = 12;
 		curPosY = 0;
 		SetCurrentCursorPos(curPosX, curPosY);
+		if (IsCollision(curPosX, curPosY, block_spin))
+			break;
+
 		while (IsCollision(curPosX, curPosY + 1, block_spin) == false)//아래에 충돌할때까지 반복
 		{
 			BlockDown();
@@ -305,6 +319,8 @@ int main()
 		completeLine(); //한줄 완성시 제거
 		ReDraw(); //보드판 다시그림
 	}
+
+	system("cls");
 
 	getchar();
 	return 0;
