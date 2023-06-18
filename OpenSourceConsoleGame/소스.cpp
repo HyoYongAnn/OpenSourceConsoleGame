@@ -97,6 +97,18 @@ bool IsCollision(int nextX, int nextY, int nextR)
 	return false;
 }
 
+void FillBoard()
+{
+	int arrX = (curPosX - GBOARD_ORIGIN_X) / 2;
+	int arrY = (curPosY - GBOARD_ORIGIN_Y);
+
+	for (int y = 0; y < 4; y++)
+		for (int x = 0; x < 4; x++)
+		{
+			GameBoard[arrY + y][arrX + x] = blockModel[block_id][block_spin][y][x];
+		}
+}
+
 void ShiftLeft()
 {
 	if (IsCollision(curPosX - 2, curPosY, block_spin))
@@ -229,7 +241,7 @@ COORD GetArrPos()
 
 
 
-void initGameBoard()
+void initGameBoard()//게임보드 초기화
 {
 	for(int y=0;y<GBOARD_HEIGHT + 1; y++)
 		for (int x = 0; x < GBOARD_WIDTH + 2; x++)
@@ -246,23 +258,26 @@ int main()
 	initGameBoard();
 	block_spin = 0;
 	srand(time(NULL));
-	block_id = rand() % 7;
-	curPosX = 12;
-	curPosY = 0;
 	system("mode con: cols=60 lines=30");
+	//각종 설정 초기화
 
+	RemoveCursor(); //커서제거
 
-	RemoveCursor();
+	drawBoard(); //보드 경계 그리기
 
-	drawBoard();
-	ReDraw();
 	while (1)
 	{
+		block_id = rand() % 7;
+		curPosX = 12;
+		curPosY = 0;
+
 		while (IsCollision(curPosX, curPosY + 1, block_spin) == false)
 		{
 			BlockDown();
-			ProcessKeyInput();
+			ProcessKeyInput(); //키보드 입력 받음
 		}
+		FillBoard();
+		ReDraw();
 	}
 
 	getchar();
