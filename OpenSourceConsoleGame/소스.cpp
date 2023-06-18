@@ -71,7 +71,7 @@ void showBlock(int blockInfo[4][4])
 	}
 }
 
-void deleteBlock(int blockInfo[4][4])
+void deleteBlock(int blockInfo[4][4])//블록을 지움
 {
 	COORD pos = GetCurrentCursorPos();
 
@@ -87,7 +87,7 @@ void deleteBlock(int blockInfo[4][4])
 	}
 }
 
-bool IsCollision(int nextX, int nextY, int nextR)
+bool IsCollision(int nextX, int nextY, int nextR)// 블록의 충돌 감지
 {
 	nextX = (nextX - GBOARD_ORIGIN_X) / 2;
 	nextY = (nextY - GBOARD_ORIGIN_Y);
@@ -101,7 +101,7 @@ bool IsCollision(int nextX, int nextY, int nextR)
 	return false;
 }
 
-void FillBoard()
+void FillBoard()//배열보드를 블록으로 채움
 {
 	int arrX = (curPosX - GBOARD_ORIGIN_X) / 2;
 	int arrY = (curPosY - GBOARD_ORIGIN_Y);
@@ -114,7 +114,7 @@ void FillBoard()
 		}
 }
 
-void ShiftLeft()
+void ShiftLeft()//왼쪽으로 이동
 {
 	if (IsCollision(curPosX - 2, curPosY, block_spin))
 		return;
@@ -124,7 +124,7 @@ void ShiftLeft()
 	showBlock(blockModel[block_id][block_spin]);
 }
 
-void ShiftRight()
+void ShiftRight()//오른쪽으로 이동
 {
 	if (IsCollision(curPosX + 2, curPosY, block_spin))
 		return;
@@ -134,7 +134,7 @@ void ShiftRight()
 	showBlock(blockModel[block_id][block_spin]);
 }
 
-void BlockDown()
+void BlockDown()//블록 떨어짐
 {
 	deleteBlock(blockModel[block_id][block_spin]);
 	curPosY += 1;
@@ -142,7 +142,7 @@ void BlockDown()
 	showBlock(blockModel[block_id][block_spin]);
 }
 
-void BlockFastDown()
+void BlockFastDown()//블록 빨리 떨어짐
 {
 	if (IsCollision(curPosX, curPosY + 1, block_spin))
 		return;
@@ -152,7 +152,7 @@ void BlockFastDown()
 	showBlock(blockModel[block_id][block_spin]);
 }
 
-void BlockUp()
+void BlockUp()//블록 위로
 {
 	deleteBlock(blockModel[block_id][block_spin]);
 	curPosY -= 1;
@@ -160,7 +160,7 @@ void BlockUp()
 	showBlock(blockModel[block_id][block_spin]);
 }
 
-void BlockDrop()
+void BlockDrop()//블록을 가장 아래로 떨굼
 {
 	deleteBlock(blockModel[block_id][block_spin]);
 	while (IsCollision(curPosX, curPosY + 1, block_spin) != true)
@@ -169,7 +169,7 @@ void BlockDrop()
 	showBlock(blockModel[block_id][block_spin]);
 }
 
-void RotateBlock()
+void RotateBlock()//블록을 시계방향으로 회전
 {
 	if (IsCollision(curPosX, curPosY, block_spin + 1))
 		return;
@@ -286,7 +286,7 @@ void completeLine() //한줄 완성시 제거하고 위에꺼 내림
 	}
 }
 
-COORD GetArrPos()
+COORD GetArrPos()// 현재 배열위치 반환
 {
 	COORD cur = GetCurrentCursorPos();
 	COORD arr;
@@ -309,13 +309,13 @@ void initGameBoard()//게임보드 초기화
 				GameBoard[y][x] = 0;
 		}
 }
-void printScore()
+void printScore()//점수 출력
 {
 	SetCurrentCursorPos(30, 5);
 	printf("[Score : %d]", score);
 }
 
-void gameover()
+void gameover()//게임오버 띄움
 {
 	SetCurrentCursorPos(24, 11);
 	printf("Game Over!");
@@ -346,7 +346,7 @@ int main()
 
 		while (IsCollision(curPosX, curPosY + 1, block_spin) == false)//아래에 충돌할때까지 반복
 		{
-			BlockDown();
+			BlockDown();//블록 내림
 			ProcessKeyInput(); //키보드 입력 받음
 		}
 		FillBoard(); //배열보드를 채움
@@ -355,8 +355,8 @@ int main()
 		printScore();//점수 출력
 	}
 
-	system("cls");
-	gameover();
+	system("cls"); //화면 비움
+	gameover();//게임오버 출력
 	getchar();
 	return 0;
 }
